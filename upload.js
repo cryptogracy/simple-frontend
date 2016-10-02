@@ -12,7 +12,7 @@ function test() {
 	//console.log(plaintext);
 
 	var hash = CryptoJS.SHA512(ciphertext);
-	var hash = hash.toString(CryptoJS.enc.Base64);
+	var hash = hash.toString(CryptoJS.enc.hex);
 	console.log(hash);
 
 	$.ajax({
