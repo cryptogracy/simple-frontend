@@ -3,7 +3,9 @@
 	<head>
 		<meta http-equiv=content-type content="text/html; charset=utf-8" />
 		<meta name=viewport content="width=device-width, initial-scale=1">
-		<!--<link rel=stylesheet type=text/css href=index.css />-->
+		<link rel=stylesheet type=text/css href=index.css />
+
+		<link href="https://fonts.googleapis.com/css?family=Comfortaa" rel="stylesheet">
 
 		<script type="text/javascript" src="crypto-js/crypto-js.js"></script>
 		<script type="text/javascript" src="jquery/dist/jquery.min.js"></script>
@@ -14,22 +16,24 @@
 	<body>
 
 		<header>
-			<h1>SharedSecret</h1>
+			<a href=/><h1>SharedSecret</h1></a>
 		</header>
 
-		<fieldset>
+		<fieldset style='display: none;'>
 			<input type=button onclick='testEnc();' value='Test encryption!' />
 			<input type=button onclick='testDec();' id=dec style="display: none;" value='Test decryption!' />
 			<div id=msg> </div>
 		</fieldset>
 
 		<fieldset id=upload>
-			<input type=file id=file />
+			<input type=file id=file onchange='fileselect(this);' />
+			<label for=file id=filelabel>Choose a file</label>
 			<input type=password id=password placeholder="Password…" />
-			<input type=button onclick='upload();' value='Encrypted upload' />
+			<input type=button onclick='upload();' value='Encrypt & upload' />
 		</fieldset>
+
 		<fieldset id=download style="display: none;">
-			URL of encrypted file:
+			<div>URL of encrypted file:</div>
 			<input type=text id=link />
 		</fieldset>
 

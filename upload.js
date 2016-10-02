@@ -134,6 +134,8 @@ function setLink(link) {
 	$('#link').val(link);
 	$('#upload').hide();
 	$('#download').show();
+	$('#link').focus();
+	$('#link').select();
 }
 
 function upload(evt) {
@@ -155,4 +157,9 @@ function upload(evt) {
 
 	// Read in the image file as a data URL.
 	reader.readAsText(file);
+}
+
+function fileselect(f) {
+	var name = f.files.length ? f.files[0].name : 'Choose a file';
+	$('#filelabel').html(name);
 }

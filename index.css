@@ -1,0 +1,58 @@
+body {
+	font-family: 'Comfortaa', cursive;
+	background-color: #eee;
+}
+
+header {
+	text-align: center;
+	margin-top: 100px;
+}
+
+header a {
+	text-decoration: none;
+	color: black;
+}
+
+fieldset {
+	background-color: #fff;
+	margin: 0 auto;
+	max-width: 300px;
+	padding: 25px;
+	border-radius: 5px;
+	border:none;
+}
+
+fieldset > * {
+	font-size: 12pt;
+	border-radius: 5px;
+	border: 1px solid gray;
+	margin: 15px;
+	padding: 10px 5px;
+	text-align: center;
+	width: 250px;
+	background-color: #eee;
+}
+
+fieldset > label:hover,
+fieldset > input:hover {
+	background-color: #ddd;
+}
+
+fieldset input[type=button] {
+	width: 262px;
+}
+
+fieldset div {
+	border: none;
+	background-color: white;
+	padding-bottom: 0px;
+}
+
+#file {
+	display: none;
+}
+
+#filelabel {
+	display: block;
+	padding: 7px;
+}
