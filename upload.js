@@ -62,7 +62,7 @@ function testEnc() {
 		url: '/api/' + hash,
 		type: 'PUT',
 		data: encrypted_json,
-		headers: { 'x-http-lifespan': 24*60*3 },
+		headers: { 'x-http-lifespan': 1 },
 		processData: false,
 		contentType: 'application/json',
 		success: function(result) {
