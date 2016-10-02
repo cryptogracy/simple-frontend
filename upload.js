@@ -12,6 +12,9 @@ var JsonFormatter = {
 		if (cipherParams.salt) {
 			jsonObj.s = cipherParams.salt.toString();
 		}
+		if (cipherParams.filename) {
+			jsonObj.filename = cipherParams.filename;
+		}
 
 		// stringify json object
 		return JSON.stringify(jsonObj);
@@ -26,25 +29,30 @@ var JsonFormatter = {
 			ciphertext: CryptoJS.enc.Base64.parse(jsonObj.ct)
 		});
 
-		// optionally extract iv and salt
+		// extract iv and salt
 		if (jsonObj.iv) {
 			cipherParams.iv = CryptoJS.enc.Hex.parse(jsonObj.iv)
 		}
 		if (jsonObj.s) {
 			cipherParams.salt = CryptoJS.enc.Hex.parse(jsonObj.s)
 		}
+		if (jsonObj.filename) {
+			cipherParams.filename = jsonObj.filename;
+		}
 
 		return cipherParams;
 	}
 };
 
+
 function testEnc() {
 
 	// Encrypt
 	var encrypted = CryptoJS.AES.encrypt("Message", "123", { format: JsonFormatter });
+	encrypted.filename = 'filename.txt';
 	encrypted_json = encrypted.toString();
-	console.log(encrypted)
-	console.log(encrypted_json)
+	console.log(encrypted);
+	console.log(encrypted_json);
 
 	hash = CryptoJS.SHA512(encrypted_json);
 	hash = hash.toString(CryptoJS.enc.hex);
@@ -83,4 +91,68 @@ function testDec() {
 			$('#msg').html(decrypted_str);
 		}
 	});
+}
+
+
+// --------------------------------------
+
+function encrypt(data, name, password, callback) {
+
+	// encrypt data
+	console.log(data);
+	console.log(name);
+	console.log(password);
+	var encrypted = CryptoJS.AES.encrypt(data, password, { format: JsonFormatter });
+	encrypted.filename = name;
+	encrypted_json = encrypted.toString();
+
+	// generate hash
+	hash = CryptoJS.SHA512(encrypted_json);
+	hash = hash.toString(CryptoJS.enc.hex);
+
+	$.ajax({
+		url: '/api/' + hash,
+		type: 'PUT',
+		data: encrypted_json,
+		headers: { 'x-http-lifespan': 24*60*3 },
+		processData: false,
+		contentType: 'application/json',
+		success: function(result) {
+			if (callback) {
+				callback(window.location.origin + '/api/' + hash);
+			}
+		}
+	});
+
+}
+
+function password() {
+	return $('#password').val();
+}
+
+function setLink(link) {
+	$('#link').val(link);
+	$('#upload').hide();
+	$('#download').show();
+}
+
+function upload(evt) {
+	var files = document.getElementById('file').files;
+	if (files.length != 1) {
+		return;
+	}
+	var file = files[0];
+	var reader = new FileReader();
+
+	// Closure to capture the file information.
+	reader.onload = (function(theFile) {
+		return function(e) {
+			var name = theFile.name;
+			var data = e.target.result;
+			encrypt(data, name, password(), setLink);
+		};
+	})(file);
+
+	// Read in the image file as a data URL.
+	reader.readAsText(file);
 }
