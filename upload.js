@@ -46,14 +46,14 @@ function testEnc() {
 	console.log(encrypted)
 	console.log(encrypted_json)
 
-	hash = CryptoJS.SHA512(encrypted);
+	hash = CryptoJS.SHA512(encrypted_json);
 	hash = hash.toString(CryptoJS.enc.hex);
 	console.log(hash);
 
 	$.ajax({
 		url: '/api/' + hash,
 		type: 'PUT',
-		data: encrypted,
+		data: encrypted_json,
 		headers: { 'x-http-lifespan': 24*60*3 },
 		processData: false,
 		contentType: 'application/json',
