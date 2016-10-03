@@ -49,6 +49,7 @@ fieldset select {
 fieldset input[type=button] {
 	background-color: #24425d;
 	color: white;
+	padding-left: 5px;
 }
 
 fieldset div {
@@ -80,10 +81,4 @@ fieldset div {
 #filelabel {
 	background: white url(/ui/img/upload3.svg) 15px 10px no-repeat;
 	background-size: 16px 16px;
-}
-
-fieldset input[type=button] {
-	background: #24425d url(/ui/img/lock.svg) 15px 10px no-repeat;
-	background-size: 16px 16px;
-	padding-left: 5px;
 }
