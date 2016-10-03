@@ -62,12 +62,12 @@ sharedsecret.encrypt = function(data, name, password, callback) {
 	callback(encrypted_json, hash);
 }
 
-sharedsecret.save = function(data, hash, duration, callback) {
+sharedsecret.save = function(data, hash, lifespan, callback) {
 	$.ajax({
 		url: '/api/' + hash,
 		type: 'PUT',
 		data: data,
-		headers: { 'x-file-lifespan': duration },
+		headers: { 'x-file-lifespan': lifespan },
 		processData: false,
 		contentType: 'application/json',
 		success: function(result) {
@@ -80,6 +80,10 @@ sharedsecret.save = function(data, hash, duration, callback) {
 
 sharedsecret.password = function() {
 	return $('#password').val();
+}
+
+sharedsecret.lifespan = function() {
+	return $('#lifespan').val();
 }
 
 sharedsecret.setlink = function(link) {
@@ -104,7 +108,8 @@ sharedsecret.upload = function() {
 			var name = theFile.name;
 			var data = e.target.result;
 			var callback = function(enc_data, hash) {
-				sharedsecret.save(enc_data, hash, 60*24*3, sharedsecret.setlink);
+				sharedsecret.save(enc_data, hash, sharedsecret.lifespan(),
+						sharedsecret.setlink);
 			};
 			sharedsecret.encrypt(data, name, sharedsecret.password(), callback);
 		};
