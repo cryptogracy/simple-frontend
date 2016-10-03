@@ -67,7 +67,7 @@ sharedsecret.save = function(data, hash, duration, callback) {
 		url: '/api/' + hash,
 		type: 'PUT',
 		data: data,
-		headers: { 'x-http-lifespan': duration },
+		headers: { 'x-file-lifespan': duration },
 		processData: false,
 		contentType: 'application/json',
 		success: function(result) {
