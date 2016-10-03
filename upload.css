@@ -1,6 +1,7 @@
 body {
 	font-family: 'Comfortaa', cursive;
 	background-color: #eee;
+	background-color: #fff;
 }
 
 header {
@@ -15,6 +16,7 @@ header a {
 
 fieldset {
 	background-color: #fff;
+	background-color: #efefef;
 	margin: 0 auto;
 	max-width: 300px;
 	padding: 25px;
@@ -22,24 +24,32 @@ fieldset {
 	border:none;
 }
 
-fieldset > * {
+fieldset > *, fieldset option {
 	font-size: 12pt;
 	border-radius: 5px;
-	border: 1px solid gray;
+	border: 1px solid #ccc;
 	margin: 15px;
 	padding: 10px 5px;
 	text-align: center;
+	text-align-last: center;
 	width: 250px;
-	background-color: #eee;
+	background-color: #fff;
 }
 
 fieldset > label:hover,
+fieldset > select:hover,
 fieldset > input:hover {
-	background-color: #ddd;
+	border: 1px solid #888;
+}
+
+fieldset input[type=button],
+fieldset select {
+	width: 262px;
 }
 
 fieldset input[type=button] {
-	width: 262px;
+	background-color: #24425d;
+	color: white;
 }
 
 fieldset div {

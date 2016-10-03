@@ -24,6 +24,15 @@
 			<input type=file id=file onchange='sharedsecret.fileselect(this);' />
 			<label for=file id=filelabel>Choose a file</label>
 			<input type=password id=password placeholder="Password…" required />
+			<select>
+				<option value=60>Keep for 1 hour</option>
+				<option value=180>Keep for 3 hour</option>
+				<option value=720>Keep for 12 hour</option>
+				<option value=1440>Keep for 1 day</option>
+				<option value=4320 selected>Keep for 3 days</option>
+				<option value=10080>Keep for 1 week</option>
+				<option value=30240>Keep for 3 week</option>
+			</select>
 			<input type=button onclick='sharedsecret.upload();' value='Encrypt & upload' />
 		</fieldset>
 
