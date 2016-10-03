@@ -26,10 +26,10 @@
 		</fieldset>
 
 		<fieldset id=upload>
-			<input type=file id=file onchange='fileselect(this);' />
+			<input type=file id=file onchange='sharedsecret.fileselect(this);' />
 			<label for=file id=filelabel>Choose a file</label>
-			<input type=password id=password placeholder="Password…" />
-			<input type=button onclick='upload();' value='Encrypt & upload' />
+			<input type=password id=password placeholder="Password…" required />
+			<input type=button onclick='sharedsecret.upload();' value='Encrypt & upload' />
 		</fieldset>
 
 		<fieldset id=download style="display: none;">

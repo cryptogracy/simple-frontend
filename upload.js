@@ -1,4 +1,6 @@
-var JsonFormatter = {
+sharedsecret = {};
+
+sharedsecret.jsonFormatter = {
 	stringify: function (cipherParams) {
 		// create json object with ciphertext
 		var jsonObj = {
@@ -44,65 +46,11 @@ var JsonFormatter = {
 	}
 };
 
-
-function testEnc() {
-
-	// Encrypt
-	var encrypted = CryptoJS.AES.encrypt("Message", "123", { format: JsonFormatter });
-	encrypted.filename = 'filename.txt';
-	encrypted_json = encrypted.toString();
-	console.log(encrypted);
-	console.log(encrypted_json);
-
-	hash = CryptoJS.SHA512(encrypted_json);
-	hash = hash.toString(CryptoJS.enc.hex);
-	console.log(hash);
-
-	$.ajax({
-		url: '/api/' + hash,
-		type: 'PUT',
-		data: encrypted_json,
-		headers: { 'x-http-lifespan': 1 },
-		processData: false,
-		contentType: 'application/json',
-		success: function(result) {
-			console.log('success');
-			$('#dec').show();
-		}
-	});
-
-}
-
-function testDec() {
-
-	$.ajax({
-		url: '/api/' + hash,
-		type: 'GET',
-		success: function(result) {
-			console.log(result);
-			//result = encrypted_json;
-			//console.log(result);
-
-			// Decrypt
-			var decrypted = CryptoJS.AES.decrypt(result, "123", { format: JsonFormatter });
-			var decrypted_str = CryptoJS.enc.Utf8.stringify(decrypted);
-			console.log(decrypted_str);
-
-			$('#msg').html(decrypted_str);
-		}
-	});
-}
-
-
-// --------------------------------------
-
-function encrypt(data, name, password, callback) {
+sharedsecret.encrypt = function(data, name, password, callback) {
 
 	// encrypt data
-	console.log(data);
-	console.log(name);
-	console.log(password);
-	var encrypted = CryptoJS.AES.encrypt(data, password, { format: JsonFormatter });
+	var encrypted = CryptoJS.AES.encrypt(data, password,
+			{ format: sharedsecret.jsonFormatter });
 	encrypted.filename = name;
 	encrypted_json = encrypted.toString();
 
@@ -110,11 +58,16 @@ function encrypt(data, name, password, callback) {
 	hash = CryptoJS.SHA512(encrypted_json);
 	hash = hash.toString(CryptoJS.enc.hex);
 
+	// Callback after ready
+	callback(encrypted_json, hash);
+}
+
+sharedsecret.save = function(data, hash, duration, callback) {
 	$.ajax({
 		url: '/api/' + hash,
 		type: 'PUT',
-		data: encrypted_json,
-		headers: { 'x-http-lifespan': 24*60*3 },
+		data: data,
+		headers: { 'x-http-lifespan': duration },
 		processData: false,
 		contentType: 'application/json',
 		success: function(result) {
@@ -123,14 +76,13 @@ function encrypt(data, name, password, callback) {
 			}
 		}
 	});
-
 }
 
-function password() {
+sharedsecret.password = function() {
 	return $('#password').val();
 }
 
-function setLink(link) {
+sharedsecret.setlink = function(link) {
 	$('#link').val(link);
 	$('#upload').hide();
 	$('#download').show();
@@ -138,7 +90,7 @@ function setLink(link) {
 	$('#link').select();
 }
 
-function upload(evt) {
+sharedsecret.upload = function() {
 	var files = document.getElementById('file').files;
 	if (files.length != 1) {
 		return;
@@ -151,7 +103,10 @@ function upload(evt) {
 		return function(e) {
 			var name = theFile.name;
 			var data = e.target.result;
-			encrypt(data, name, password(), setLink);
+			var callback = function(enc_data, hash) {
+				sharedsecret.save(enc_data, hash, 60*24*3, sharedsecret.setlink);
+			};
+			sharedsecret.encrypt(data, name, sharedsecret.password(), callback);
 		};
 	})(file);
 
@@ -159,7 +114,7 @@ function upload(evt) {
 	reader.readAsText(file);
 }
 
-function fileselect(f) {
+sharedsecret.fileselect = function(f) {
 	var name = f.files.length ? f.files[0].name : 'Choose a file';
 	$('#filelabel').html(name);
 }
